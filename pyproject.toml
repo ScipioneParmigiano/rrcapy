@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "rrcapy"
+version = "0.1.0"
+description = ""
+authors = ["ScipioneParmigiano <pcs.parmigiano@gmial.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^2.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
