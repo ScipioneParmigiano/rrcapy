@@ -9,17 +9,18 @@
 // any warranty, see <https://github.com/muchip/RRCA> for further             //
 // information.                                                               //
 ////////////////////////////////////////////////////////////////////////////////
+#include <iostream>
 #ifndef RRCA_CHOLESKYDECOMPOSITION_PIVOTEDCHOLESKYDECOMPOSITION_H_
 #define RRCA_CHOLESKYDECOMPOSITION_PIVOTEDCHOLESKYDECOMPOSITION_H_
 
 namespace RRCA {
 
 template <typename KernelMatrix>
-class PivotedCholeskyDecompositon
+class PivotedCholeskyDecomposition
     : public CholeskyDecompositionBase<
-      PivotedCholeskyDecompositon<KernelMatrix>, KernelMatrix> {
+      PivotedCholeskyDecomposition<KernelMatrix>, KernelMatrix> {
 public:
-    typedef CholeskyDecompositionBase<PivotedCholeskyDecompositon, KernelMatrix>
+    typedef CholeskyDecompositionBase<PivotedCholeskyDecomposition, KernelMatrix>
     Base;
     // get types from base class
     using value_type = typename Base::value_type;
@@ -30,9 +31,9 @@ public:
     using Base::info_;
     using Base::Lmatrix_;
     using Base::tol_;
-    PivotedCholeskyDecompositon() {}
+    PivotedCholeskyDecomposition() {}
     // non-void constructor
-    PivotedCholeskyDecompositon ( const kernelMatrix &C, value_type tol ) {
+    PivotedCholeskyDecomposition ( const kernelMatrix &C, value_type tol ) {
         compute ( C, tol );
     }
     /*
@@ -41,10 +42,6 @@ public:
      */
     void compute ( const kernelMatrix &C, value_type tol, Eigen::Index piv_limit = 0, Eigen::Index step_limit = 0 ) {
         Vector D;
-
-                std::cout <<12 << std::endl;
-
-
         Eigen::Index pivot = 0;
         Eigen::Index actBSize = 0;
         Eigen::Index cols = piv_limit ? piv_limit : C.cols();
@@ -54,8 +51,6 @@ public:
         tol_ = tol;
         // compute the diagonal and the trace
         D = C.diagonal();
-
-        std::cout <<13 << std::endl;
         if ( D.minCoeff() < 0 ) {
             info_ = 1;
             return;
@@ -65,8 +60,6 @@ public:
         tol *= tr;
         // perform pivoted Cholesky decomposition
         Eigen::Index step = 0;
-
-        std::cout <<14 << std::endl;
         while ( ( step < cols ) && ( tol < tr ) && ( step < limit ) ) {
             // check memory requirements
             if ( actBSize - 1 <= step ) {
@@ -93,8 +86,6 @@ public:
             tr = D.sum();
             ++step;
         }
-
-        std::cout <<15 << std::endl;
 
         if ( tr < 0 )
             info_ = 2;

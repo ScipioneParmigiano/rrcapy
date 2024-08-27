@@ -12,8 +12,6 @@
 #ifndef RRCA_KERNELBASIS_KERNELBASIS_H_
 #define RRCA_KERNELBASIS_KERNELBASIS_H_
 
-#include "../CholeskyDecomposition/CholeskyDecompositionBase.h"
-
 namespace RRCA {
 
 template <typename KernelMatrix>
@@ -91,11 +89,8 @@ class KernelBasis {
   template <typename Derived>
   void initNewtonBasisWeights(
       const CholeskyDecompositionBase<Derived, KernelMatrix> &chol) {
-        std::cout << "41" <<std::endl;
-
     Umatrix_.resize(chol.matrixL().cols(), chol.matrixL().cols());
     Umatrix_.setZero();
-    std::cout << "42" <<std::endl;
     for (auto i = 0; i < chol.pivots().size(); ++i) {
       Umatrix_(i, i) = 1;
       Umatrix_.col(i) -=
@@ -103,7 +98,6 @@ class KernelBasis {
           chol.matrixL().row(chol.pivots()(i)).head(i).transpose();
       Umatrix_.col(i) /= chol.matrixL()(chol.pivots()(i), i);
     }
-    std::cout << "43" <<std::endl;
     return;
   }
   /*
@@ -115,30 +109,16 @@ class KernelBasis {
       const CholeskyDecompositionBase<Derived, KernelMatrix> &chol) {
     // recompute U in any case
     initNewtonBasisWeights(chol);
-
-    std::cout << 31 << std::endl;
-
-    // std::cout << chol << std::endl;
     // compute spectral decomposition of L^TL
     Matrix C = chol.matrixL().transpose() * chol.matrixL();
-    std::cout << "31.5" << C << std::endl;
-    std::cout << chol.matrixL() << std::endl;
-
-    std::cout << 32 << std::endl;
-    std::cout << 33 << std::endl;
     Eigen::SelfAdjointEigenSolver<Matrix> es(C);
-    std::cout << 33 << std::endl;
     Qmatrix_ = es.eigenvectors();
     lambda_ = es.eigenvalues().reverse();
     // sort the eigen basis such that the eigenvalues are decreasing
     for (auto i = 0; i < Qmatrix_.cols() / 2; ++i)
       Qmatrix_.col(i).swap(Qmatrix_.col(Qmatrix_.cols() - 1 - i));
-
-
     // assemble the actual weights
     Qmatrix_ = Umatrix_ * Qmatrix_;
-        std::cout << 34 << std::endl;
-
     return;
   }
   
