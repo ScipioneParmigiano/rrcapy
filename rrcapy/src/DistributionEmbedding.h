@@ -56,10 +56,10 @@ namespace RRCA{
             /*
             *    \brief solves the unconstrained finite-dimensional optimization problem for given kernel parameterization
             */
-                int solveUnconstrained ( double l1, double l2,double prec,double lam ){
+            int solveUnconstrained ( double l1, double l2,double prec,double lam ){
 
-                precomputeKernelMatrices ( l1, l2,prec,lam );
                 std::cout << 3 << std::endl;
+                precomputeKernelMatrices ( l1, l2,prec,lam );
 
                 h = (Qy * ( -prob_vec.cwiseQuotient (prob_quadFormMat).reshaped(Qy.cols(), Qx.cols()) ) * Qx.transpose()).reshaped();
                     std::cout << 4 << std::endl;
@@ -77,11 +77,20 @@ namespace RRCA{
             */
             Matrix condExpfVec ( const Matrix& Xs, bool structuralYes = false ) const{
 
+                std::cout << "Number of rows: " << Kyblock.rows() << std::endl;
+                std::cout << "Number of columns: " << Kyblock.cols() << std::endl;
+                std::cout << "Number of rows: " << H.rows() << std::endl;
+                std::cout << "Number of columns: " << H.cols() << std::endl;
+                std::cout << "Number of rows: " << basx.eval(Xs).transpose().rows() << std::endl;
+                std::cout << "Number of columns: " << basx.eval(Xs).transpose().cols() << std::endl;
+
                 const Matrix res = Kyblock *H*basx.eval(Xs).transpose() + Matrix::Constant(Kyblock.rows(),Xs.cols(),1);
                 if(!structuralYes){
                     return(res.array().rowwise()/res.colwise().sum().array());
                 }
                 // const Matrix resres = res.array().rowwise()/res.colwise().sum().array();
+
+
 
                 return ( res.array().cwiseMax(0.0).rowwise()/res.cwiseMax(0.0).colwise().sum().array());
             }
@@ -144,14 +153,18 @@ namespace RRCA{
 
                 Kx.kernel().l = l1;
                 Ky.kernel().l = l2;
+
+                std::cout << 1 << std::endl;
             
                 pivx.compute ( Kx,prec);
-                std::cout << 1 << std::endl;
+                std::cout << 13 << std::endl;
                 basx.init(Kx, pivx.pivots());
                 
                 std::cout << 1 << std::endl;
+                std::cout << "er1" << std::endl;
                 basx.initSpectralBasisWeights(pivx);
-                
+                std::cout << "er2" << std::endl;
+                std::cout << 3 << std::endl;
                 
                 Qx =  basx.matrixQ() ;
                 Kxblock = basx.eval(xdata);

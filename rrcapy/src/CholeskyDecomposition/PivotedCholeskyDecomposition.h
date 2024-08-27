@@ -41,6 +41,10 @@ public:
      */
     void compute ( const kernelMatrix &C, value_type tol, Eigen::Index piv_limit = 0, Eigen::Index step_limit = 0 ) {
         Vector D;
+
+                std::cout <<12 << std::endl;
+
+
         Eigen::Index pivot = 0;
         Eigen::Index actBSize = 0;
         Eigen::Index cols = piv_limit ? piv_limit : C.cols();
@@ -50,6 +54,8 @@ public:
         tol_ = tol;
         // compute the diagonal and the trace
         D = C.diagonal();
+
+        std::cout <<13 << std::endl;
         if ( D.minCoeff() < 0 ) {
             info_ = 1;
             return;
@@ -59,6 +65,8 @@ public:
         tol *= tr;
         // perform pivoted Cholesky decomposition
         Eigen::Index step = 0;
+
+        std::cout <<14 << std::endl;
         while ( ( step < cols ) && ( tol < tr ) && ( step < limit ) ) {
             // check memory requirements
             if ( actBSize - 1 <= step ) {
@@ -85,6 +93,8 @@ public:
             tr = D.sum();
             ++step;
         }
+
+        std::cout <<15 << std::endl;
 
         if ( tr < 0 )
             info_ = 2;
