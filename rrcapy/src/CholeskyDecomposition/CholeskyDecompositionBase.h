@@ -11,7 +11,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef RRCA_CHOLESKYDECOMPOSITION_CHOLESKYDECOMPOSITIONBASE_H_
 #define RRCA_CHOLESKYDECOMPOSITION_CHOLESKYDECOMPOSITIONBASE_H_
-
+#include <iostream>
 namespace RRCA {
 
 template <typename Derived, typename KernelMatrix>
@@ -30,7 +30,9 @@ class CholeskyDecompositionBase {
    */
   template <typename... Ts>
   void compute(Ts &&...ts) {
+    std::cout << 21 << std::endl;
     derived().compute(std::forward<Ts>(ts)...);
+    std::cout << 22 << std::endl;
   }
   //////////////////////////////////////////////////////////////////////////////
   /*

@@ -11,6 +11,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef RRCA_KERNELMATRIX_KERNELMATRIX_H_
 #define RRCA_KERNELMATRIX_KERNELMATRIX_H_
+#include <iostream>
 
 namespace RRCA {
 template <typename KernelFunction, typename Derived>
@@ -28,15 +29,18 @@ struct KernelMatrix {
   const KernelFunction &kernel() const { return kernel_; }
   KernelFunction &kernel() { return kernel_; }
   //////////////////////////////////////////////////////////////////////////////
-  const Derived &pts() const { return pts_; };
+  const Derived &pts() const { std::cout << 71; return pts_; std::cout << 72; };
   //////////////////////////////////////////////////////////////////////////////
   double operator()(int i, int j) const {
+    // std::cout << 61 <<std::endl;
     return kernel_(pts_.col(i), pts_.col(j));
   }
   //////////////////////////////////////////////////////////////////////////////
   Vector col(Eigen::Index j) const {
     Vector retval(dim_);
-    for (auto i = 0; i < dim_; ++i) retval(i) = operator()(i, j);
+    // std::cout << 51 << std::endl;
+    // std::cout << "dim: " << dim_ << std::endl;
+    for (auto i = 0; i < dim_; ++i)  {/*std::cout << "index col: "<< i << std::endl; std::cout<< operator()(i, j) << std::endl << "fallimento qui a asx?"<< std::endl; */retval(i) =operator()(i, j);};
     return retval;
   }
   //////////////////////////////////////////////////////////////////////////////
@@ -46,8 +50,12 @@ struct KernelMatrix {
     return retval;
   }
   Matrix full() const {
+    std::cout << 41 << std::endl;
     Matrix retval(dim_, dim_);
-    for (auto i = 0; i < retval.cols(); ++i) retval.col(i) = col(i);
+    std::cout << 42 << std::endl;
+    std::cout << "cols: " << retval.cols()<< std::endl;
+    for (auto i = 0; i < retval.cols(); ++i) {/*std::cout << "retval: " <<retval.col(i) << std::endl; std::cout << "i" << std::endl; std::cout << "col: " <<col(i) << std::endl; */retval.col(i) = col(i);};
+    std::cout << 43 << std::endl;
     return retval;
   }
   //////////////////////////////////////////////////////////////////////////////

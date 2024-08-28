@@ -27,5 +27,16 @@ PYBIND11_MODULE(distribution_embedding, m) {
                 RRCA::PivotedCholeskyDecomposition<RRCA::KernelMatrix<RRCA::GaussianKernel, RRCA::Matrix>>,
                 RRCA::KernelBasis<RRCA::KernelMatrix<RRCA::GaussianKernel, RRCA::Matrix>>
                 >::condExpfVec)
+        .def("printKx", &RRCA::DISTRIBUTIONEMBEDDING::DistributionEmbedding<
+                RRCA::KernelMatrix<RRCA::GaussianKernel, RRCA::Matrix>,
+                RRCA::PivotedCholeskyDecomposition<RRCA::KernelMatrix<RRCA::GaussianKernel, RRCA::Matrix>>,
+                RRCA::KernelBasis<RRCA::KernelMatrix<RRCA::GaussianKernel, RRCA::Matrix>>
+                >::printKx)
+        .def("printXdata", &RRCA::DISTRIBUTIONEMBEDDING::DistributionEmbedding<
+                RRCA::KernelMatrix<RRCA::GaussianKernel, RRCA::Matrix>,
+                RRCA::PivotedCholeskyDecomposition<RRCA::KernelMatrix<RRCA::GaussianKernel, RRCA::Matrix>>,
+                RRCA::KernelBasis<RRCA::KernelMatrix<RRCA::GaussianKernel, RRCA::Matrix>>
+                >::printXdata)
+        ;
         ;
 }

@@ -9,10 +9,10 @@
 // any warranty, see <https://github.com/muchip/RRCA> for further             //
 // information.                                                               //
 ////////////////////////////////////////////////////////////////////////////////
-#include <iostream>
 #ifndef RRCA_CHOLESKYDECOMPOSITION_PIVOTEDCHOLESKYDECOMPOSITION_H_
 #define RRCA_CHOLESKYDECOMPOSITION_PIVOTEDCHOLESKYDECOMPOSITION_H_
 
+#include <iostream>
 namespace RRCA {
 
 template <typename KernelMatrix>
@@ -49,17 +49,25 @@ public:
         Eigen::Index rows = C.rows();
         value_type tr = 0;
         tol_ = tol;
+        std::cout << 31 << std::endl;
+        std::cout << "C: " << std::endl; 
+        std::cout << "C " <<C.full() << std::endl;  // interagire con c manda tutto all'aria
+        std::cout << "C: " << std::endl; 
         // compute the diagonal and the trace
         D = C.diagonal();
+        std::cout << 31.5 << std::endl;
         if ( D.minCoeff() < 0 ) {
             info_ = 1;
             return;
         }
+        std::cout << 32 << std::endl;
         tr = D.sum();
         // we guarantee the error tr(A-LL^T)/tr(A) < tol
         tol *= tr;
         // perform pivoted Cholesky decomposition
         Eigen::Index step = 0;
+
+        std::cout << 33 << std::endl;
         while ( ( step < cols ) && ( tol < tr ) && ( step < limit ) ) {
             // check memory requirements
             if ( actBSize - 1 <= step ) {
@@ -86,14 +94,17 @@ public:
             tr = D.sum();
             ++step;
         }
+        std::cout << 33 << std::endl;
 
         if ( tr < 0 )
             info_ = 2;
         else
             info_ = 0;
+        std::cout << 34 << std::endl;
         // crop L, indices to their actual size
         Lmatrix_.conservativeResize ( rows, step );
         indices_.conservativeResize ( step );
+        std::cout << 35 << std::endl;
         return;
     }
 
